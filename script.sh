@@ -8,13 +8,13 @@ NC='\033[0m' # Sin color
 # Función para actualizar e instalar paquetes
 actualizar_e_instalar() {
     echo -e "${VERDE}Actualizando el índice de paquetes...${NC}"
-    sudo apt update -qq > /dev/null
+    sudo apt update -qq > /dev/null 2>&1
 
     echo -e "${VERDE}Instalando Python 3 y pip...${NC}"
-    sudo apt install -y python3 python3-pip > /dev/null
+    sudo apt install -y python3 python3-pip > /dev/null 2>&1
 
     echo -e "${VERDE}Instalando bibliotecas de Python...${NC}"
-    pip3 install telethon python-telegram-bot colorama > /dev/null
+    pip3 install telethon python-telegram-bot colorama > /dev/null 2>&1
 
     echo -e "${VERDE}Instalación completada.${NC}"
     
