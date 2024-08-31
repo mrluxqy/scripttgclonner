@@ -65,11 +65,21 @@ mostrar_menu() {
     case $opcion in
         1)
             echo -e "${VERDE}Ejecutando clonador...${NC}"
-            python3 dist/download.py
+            # Cambiar al directorio dist y ejecutar download.py
+            if [ -f "dist/download.py" ]; then
+                (cd dist && python3 download.py)
+            else
+                echo -e "${ROJO}Archivo dist/download.py no encontrado.${NC}"
+            fi
             ;;
         2)
             echo -e "${VERDE}Ejecutando reenviador...${NC}"
-            python3 dist2/reenviar.py
+            # Cambiar al directorio dist2 y ejecutar reenviar.py
+            if [ -f "dist2/reenviar.py" ]; then
+                (cd dist2 && python3 reenviar.py)
+            else
+                echo -e "${ROJO}Archivo dist2/reenviar.py no encontrado.${NC}"
+            fi
             ;;
         3)
             echo -e "${VERDE}Actualizando e instalando dependencias...${NC}"
