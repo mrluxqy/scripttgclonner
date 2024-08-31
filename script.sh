@@ -8,58 +8,79 @@ NC='\033[0m' # Sin color
 # Función para actualizar e instalar paquetes
 actualizar_e_instalar() {
     echo -e "${VERDE}Actualizando el índice de paquetes...${NC}"
-    sudo apt update
+    sudo apt update -qq > /dev/null
 
     echo -e "${VERDE}Instalando Python 3 y pip...${NC}"
-    sudo apt install -y python3 python3-pip
+    sudo apt install -y python3 python3-pip > /dev/null
 
     echo -e "${VERDE}Instalando bibliotecas de Python...${NC}"
-    pip3 install telethon
-    pip3 install python-telegram-bot
-    pip3 install colorama
+    pip3 install telethon python-telegram-bot colorama > /dev/null
 
     echo -e "${VERDE}Instalación completada.${NC}"
+    
+    # Mostrar opciones después de la instalación
+    echo -e "${VERDE}1. Volver al menú${NC}"
+    echo -e "${VERDE}2. Detener script${NC}"
+    echo -e "Elige una opción (1 o 2):"
+    
+    # Leer la opción del usuario
+    read opcion
+    
+    case $opcion in
+        1)
+            mostrar_menu
+            ;;
+        2)
+            echo -e "${VERDE}Deteniendo el script.${NC}"
+            exit 0
+            ;;
+        *)
+            echo -e "${ROJO}Opción no válida. Por favor, elige 1 o 2.${NC}"
+            actualizar_e_instalar
+            ;;
+    esac
 }
 
-# Actualizar e instalar si se selecciona la opción 3
-if [ "$1" == "setup" ]; then
-    actualizar_e_instalar
-    exit 0
-fi
+# Función para mostrar el menú
+mostrar_menu() {
+    # Mostrar el texto ASCII "MENU" en color rojo
+    echo -e "${ROJO}"
+    echo "███    ███ ███████ ███    ██ ██    ██ "
+    echo "████  ████ ██      ████   ██ ██    ██ "
+    echo "██ ████ ██ █████   ██ ██  ██ ██    ██ "
+    echo "██  ██  ██ ██      ██  ██ ██ ██    ██ "
+    echo "██      ██ ███████ ██   ████  ██████  "
+    echo -e "${NC}"
 
-# Mostrar el texto ASCII "MENU" en color rojo
-echo -e "${ROJO}"
-echo "███    ███ ███████ ███    ██ ██    ██ "
-echo "████  ████ ██      ████   ██ ██    ██ "
-echo "██ ████ ██ █████   ██ ██  ██ ██    ██ "
-echo "██  ██  ██ ██      ██  ██ ██ ██    ██ "
-echo "██      ██ ███████ ██   ████  ██████  "
-echo -e "${NC}"
+    # Mostrar el menú en verde
+    echo -e "${VERDE}1. Ejecutar clonador${NC}"
+    echo -e "${VERDE}2. Ejecutar reenviador${NC}"
+    echo -e "${VERDE}3. Actualizar e instalar dependencias${NC}"
+    echo -e "Elige una opción (1, 2 o 3):"
 
-# Mostrar el menú en verde
-echo -e "${VERDE}1. Ejecutar clonador${NC}"
-echo -e "${VERDE}2. Ejecutar reenviador${NC}"
-echo -e "${VERDE}3. Actualizar e instalar dependencias${NC}"
-echo -e "Elige una opción (1, 2 o 3):"
+    # Leer la opción del usuario
+    read opcion
 
-# Leer la opción del usuario
-read opcion
+    # Ejecutar el script correspondiente según la opción
+    case $opcion in
+        1)
+            echo -e "${VERDE}Ejecutando clonador...${NC}"
+            python3 dist/download.py
+            ;;
+        2)
+            echo -e "${VERDE}Ejecutando reenviador...${NC}"
+            python3 dist2/reenviar.py
+            ;;
+        3)
+            echo -e "${VERDE}Actualizando e instalando dependencias...${NC}"
+            actualizar_e_instalar
+            ;;
+        *)
+            echo -e "${ROJO}Opción no válida. Por favor, elige 1, 2 o 3.${NC}"
+            mostrar_menu
+            ;;
+    esac
+}
 
-# Ejecutar el script correspondiente según la opción
-case $opcion in
-    1)
-        echo -e "${VERDE}Ejecutando clonador...${NC}"
-        python3 dist/download.py
-        ;;
-    2)
-        echo -e "${VERDE}Ejecutando reenviador...${NC}"
-        python3 dist2/reenviar.py
-        ;;
-    3)
-        echo -e "${VERDE}Actualizando e instalando dependencias...${NC}"
-        ./script.sh setup
-        ;;
-    *)
-        echo -e "${ROJO}Opción no válida. Por favor, elige 1, 2 o 3.${NC}"
-        ;;
-esac
+# Llamar a la función de menú
+mostrar_menu
